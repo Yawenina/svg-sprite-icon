@@ -22,7 +22,7 @@ OK, 以上就是我们的理想模式。So, let’s go!
 ## 工作原理
 网上搜寻了一圈，一个简单的解决方案是 —— svg 雪碧图。
 
-它的工作原理是: **利用sag的`symbol`元素，将每个icon包括在`symbol`中，通过`use`元素使用该`symbol`**.
+它的工作原理是: **利用svg的`symbol`元素，将每个icon包括在`symbol`中，通过`use`元素使用该`symbol`**.
 
 OK，如果你对此不了解，可以阅读张鑫旭老师的[这篇文章](https://www.zhangxinxu.com/wordpress/2014/07/introduce-svg-sprite-technology/).
 
