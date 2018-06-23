@@ -1,13 +1,13 @@
 <template>
   <svg>
-    <use :xlink:href="`#${name}`"></use>
+    <use :xlink:href="`#${name}`" :style="`fill:${fill}`"></use>
   </svg>
 </template>
 
 <script>
   export default {
     name: "icon",
-    props: ['name'],
+    props: ['name', 'fill'],
   }
 </script>
 
