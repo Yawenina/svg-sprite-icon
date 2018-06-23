@@ -1,6 +1,6 @@
-# 懒人神器：svn-sprite-loader实现自己的Icon组件
+# 懒人神器：svg-sprite-loader实现自己的Icon组件
 
-> 用 svn-sprite-loader 解放你的icon.
+> 用 svg-sprite-loader 解放你的icon.
 
 好吧，这篇文章的起源就来源于——我懒。
 
@@ -22,11 +22,11 @@ OK, 以上就是我们的理想模式。So, let’s go!
 ## 工作原理
 网上搜寻了一圈，一个简单的解决方案是 —— svg 雪碧图。
 
-它的工作原理是: **利用sag的`symbol`元素，将每个icon包括在`symbol`中，通过`use`元素使用该`symbol`**.
+它的工作原理是: **利用svg的`symbol`元素，将每个icon包括在`symbol`中，通过`use`元素使用该`symbol`**.
 
 OK，如果你对此不了解，可以阅读张鑫旭老师的[这篇文章](https://www.zhangxinxu.com/wordpress/2014/07/introduce-svg-sprite-technology/).
 
-我们这里简单一点的解释就是，最终你的svg icon会变成下面这个样子的svg 雪碧图:
+我们这里简单一点的解释就是，最终你的svg icon会变成下面这个样子的 svg 雪碧图:
 
 ```html
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="__SVG_SPRITE_NODE__">
@@ -130,20 +130,20 @@ import 'your-icon.svg';
 上面我们的基本功能已经完成了，还有最后一个小小的问题——我每次引用一个文件的时候就得import一下，这肯定也不满足我们偷懒的最终目标。
 不过，总会有人比你更懒，或者总会有人比你先懒。在这里，我们可以使用webpack的[require.context](https://webpack.js.org/guides/dependency-management/#require-context)API来动态引入你所有的Icon.
 
-现在我们是不能动态引入模块，但是web pack为我们提供了相关功能，[webpack]([Dependency Management](https://webpack.js.org/guides/dependency-management/)) 允许我们使用表达式动态引入模块。比如：`require('./template/' + name + '.ejs');`，此时web pack会生成一个`context module`
+现在我们是不能动态引入模块，但是webpack为我们提供了相关功能，[webpack]([Dependency Management](https://webpack.js.org/guides/dependency-management/)) 允许我们使用表达式动态引入模块。比如：`require('./template/' + name + '.ejs');`，此时webpack会生成一个`context module`
 
 > A context module is generated. It contains references to all modules in that directory that can be required with a request matching the regular expression. The context module contains a map which translates requests to module ids.
 
 它会被抽象成以下信息：
 ```
 {
-  "./table.ejs": 42, // key 是module, value是module id
+  "./table.ejs": 42, // key 是module, value 是module id
   "./table-row.ejs": 43,
   "./directory/folder.ejs": 44
 }
 ```
 
-因此，我们可以利用web pack提供的的[`require.context`]([Dependency Management](https://webpack.js.org/guides/dependency-management/#require-context)API 来创建自己的`context module`动态引入icon。它接受三个参数，第一个是文件夹，第二个是是否使用子文件，第三个是文件匹配的正则。
+因此，我们可以利用webpack提供的的[`require.context`]([Dependency Management](https://webpack.js.org/guides/dependency-management/#require-context)API 来创建自己的`context module`动态引入icon。它接受三个参数，第一个是文件夹，第二个是是否使用子文件，第三个是文件匹配的正则。
 `require.context(directory, useSubdirectories = false, regExp = /^\.\//)`
 对于我们的项目来说，我们需要动态引入的就是`require.context('./src/assets/icons', false, /\.svg/)`.
 
@@ -237,7 +237,7 @@ request.keys().forEach(request);
 
 - 优化SVG
 有时候，设计师切的icon并不那么geek, 有很多多余的东西，可以使用大名鼎鼎的[svgo](https://github.com/svg/svgo)进行优化，
-它提供web在线版，web pack loader等。
+它提供web在线版，webpack loader等。
 
 - 其他工具
 [vue-svgicon](https://github.com/MMF-FE/vue-svgicon)这款工具相比我们的有更多的feature，比如动画、方向等。它会给每个icon生成一个相对应的js文件，
