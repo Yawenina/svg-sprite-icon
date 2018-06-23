@@ -7,6 +7,7 @@ const request = require.context('./assets/icons', false, /\.svg$/);
 console.log('request', request);
 console.log('request.keys', request.keys());
 console.log('request.id', request.id);
+console.log('request.resolve()', request.resolve('./store.svg'));
 console.log('request.resolve', request.resolve);
 // require every module
 request.keys().forEach(request);

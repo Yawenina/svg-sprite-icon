@@ -130,7 +130,7 @@ import 'your-icon.svg';
 上面我们的基本功能已经完成了，还有最后一个小小的问题——我每次引用一个文件的时候就得import一下，这肯定也不满足我们偷懒的最终目标。
 不过，总会有人比你更懒，或者总会有人比你先懒。在这里，我们可以使用webpack的[require.context](https://webpack.js.org/guides/dependency-management/#require-context)API来动态引入你所有的Icon.
 
-现在我们是不能动态引入模块，但是webpack为我们提供了相关功能，[webpack]([Dependency Management](https://webpack.js.org/guides/dependency-management/)) 允许我们使用表达式动态引入模块。比如：`require('./template/' + name + '.ejs');`，此时webpack会生成一个`context module`
+现在我们是不能动态引入模块，但是web pack为我们提供了相关功能，[webpack]([Dependency Management](https://webpack.js.org/guides/dependency-management/)) 允许我们使用表达式动态引入模块。比如：`require('./template/' + name + '.ejs');`，此时web pack会生成一个`context module`
 
 > A context module is generated. It contains references to all modules in that directory that can be required with a request matching the regular expression. The context module contains a map which translates requests to module ids.
 
@@ -143,7 +143,7 @@ import 'your-icon.svg';
 }
 ```
 
-因此，我们可以利用webpack提供的的[`require.context`]([Dependency Management](https://webpack.js.org/guides/dependency-management/#require-context)API 来创建自己的`context module`动态引入icon。它接受三个参数，第一个是文件夹，第二个是是否使用子文件，第三个是文件匹配的正则。
+因此，我们可以利用web pack提供的的[`require.context`]([Dependency Management](https://webpack.js.org/guides/dependency-management/#require-context)API 来创建自己的`context module`动态引入icon。它接受三个参数，第一个是文件夹，第二个是是否使用子文件，第三个是文件匹配的正则。
 `require.context(directory, useSubdirectories = false, regExp = /^\.\//)`
 对于我们的项目来说，我们需要动态引入的就是`require.context('./src/assets/icons', false, /\.svg/)`.
 
@@ -152,12 +152,15 @@ import 'your-icon.svg';
 - `resolve()`返回的是请求的module的id;
 - `id`是该`context module`的id;
 
+总的来说，就是说`require.context`帮我们创建一个上下文，比如在这里我们的上下文就是`./src/assets/icons`, 随后我们就可以通过`request.resolve('./store.svg')`来引入该上下文内的文件了。
+
 我们打印一下:
 ```
 const request = require.context('./assets/icons', false, /\.svg$/);
 console.log(request);
 console.log(request.keys());
 console.log(request.id);
+console.log('request.resolve()', request.resolve('./store.svg'));
 console.log(request.resolve);
 
 ```
@@ -176,6 +179,9 @@ webpackContext(req) {
 
 // request.id
 ./src/assets/icons sync \.svg$
+
+// request.resolve('./store.svg');
+./src/assets/icons/store.svg
 
 // request.resolve
 webpackContextResolve(req) {
@@ -223,7 +229,6 @@ webpackContext.id = "./src/assets/icons sync \\.svg$";
 request.keys().forEach(request);
 ```
 
-
 ## 总结
 - 原理：
 	- `symbol` + `use:xlink:href`;
@@ -240,6 +245,7 @@ request.keys().forEach(request);
 不过在其他的时候，他也可以作为另一个选择。
 
 - 相关代码已经放在[github](https://github.com/Yawenina/svg-sprite-icon)上啦
-
+- 本来想放在[codesandbox](https://codesandbox.io/)上的，结果目前他们[还不支持](https://github.com/CompuIves/codesandbox-client/issues/723)
+`require.context`API.
 
 
